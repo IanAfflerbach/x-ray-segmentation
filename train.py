@@ -15,14 +15,42 @@ test_loader = DataLoader(test_dataset, batch_size=1, shuffle=True)
 model = SegmentationModel()
 loss = torch.nn.BCEWithLogitsLoss()
 
+# create optimizers
+optimizer = torch.optim.Adam(model.parameters(), lr=0.05)
+scheduler = torch.optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.99)
+
 # run training loop
-NUM_EPOCHS = 2 # 20
+NUM_EPOCHS = 20
+iteration = 0
 for epoch in range(NUM_EPOCHS):
-    print("Epoch:", epoch)
+    # set model to train mode
+    model.train()
+    losses = []
+
     for img, label in train_loader:
+        # log epoch
+        print("Epoch:", epoch, "Iteration:", iteration, end='\r')
+        iteration += 1
+
+        # make mask prediction
         pred = model(img)
+
+        # compute loss
         l = loss(pred, label)
+        losses.append(l.item())
+        
+        # compute gradiant
+        optimizer.zero_grad()
         l.backward()
+
+        # step optimizer
+        optimizer.step()
+
+    # epoch complete
+    print("Epoch:", epoch, "... Complete, Avg Loss:", sum(losses) / len(losses))
+
+    # step scheduler
+    scheduler.step()
 
 # visual performance of model
 test_iter = iter(test_loader)
@@ -37,7 +65,7 @@ stitched_masks = utils.stitch_images_horizontal(*masks)
 true_segs = [utils.segment_image(imgs[i], masks[i]) for i in range(5)]
 stitched_true_segs = utils.stitch_images_horizontal(*true_segs)
 
-pred_masks = [transforms.ToPILImage()(model(transforms.ToTensor()(img)[None, :])[0]) for img in imgs]
+pred_masks = [model.get_mask(img) for img in imgs]
 stitched_pred_masks = utils.stitch_images_horizontal(*pred_masks)
 
 pred_segs = [utils.segment_image(imgs[i], pred_masks[i]) for i in range(5)]

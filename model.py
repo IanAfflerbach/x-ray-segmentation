@@ -1,4 +1,5 @@
 import torch
+from torchvision import transforms
 
 class SegmentationModel(torch.nn.Module):
     class ConvBlock(torch.nn.Module):
@@ -85,7 +86,16 @@ class SegmentationModel(torch.nn.Module):
 
         z = self.conv_final(z)
         # print("1x1 Conv", z.shape)
-        z = self.sigmoid(z)
+        # z = self.sigmoid(z)
         # print("Sigmoid", z.shape)
 
         return z
+    
+    def get_mask(self, img):
+        self.eval()
+        tensor = transforms.ToTensor()(img)[None, :]
+        mask_tensor = self.forward(tensor)[0]
+        mask_tensor = self.sigmoid(mask_tensor)
+        mask_tensor = (mask_tensor > 0.5).float()
+        mask = transforms.ToPILImage()(mask_tensor)
+        return mask
