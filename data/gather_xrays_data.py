@@ -41,6 +41,7 @@ def download_images(img_name, img_path):
 # get index file of segmented data
 index_filename = 'CXLSeg-segmented.csv'
 if not os.path.exists(index_filename):
+    print("Loading Segmentation Index...")
     get_file('https://physionet.org/files/chest-x-ray-segmentation/1.0.0/CXLSeg-segmented.csv')
 
 # download datasets
