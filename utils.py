@@ -1,5 +1,17 @@
 from PIL import Image, ImageChops
 
+def save_model(model, name):
+    from torch import save
+    from os import path
+    return save(model.state_dict(), path.join(path.dirname(path.abspath(__file__)), name))
+
+def load_model(model_class, name):
+    from torch import load
+    from os import path
+    r = model_class()
+    r.load_state_dict(load(path.join(path.dirname(path.abspath(__file__)), name), map_location='cpu'))
+    return r
+
 def segment_image(img, mask):
     img = img.convert('RGB')
     mask = mask.convert('RGB')

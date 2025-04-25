@@ -1,5 +1,7 @@
 python==3.13.2
+gzip
 numpy
 pillow
+shutil
 torch
 torchvision

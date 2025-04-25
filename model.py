@@ -91,11 +91,14 @@ class SegmentationModel(torch.nn.Module):
 
         return z
     
+    def get_mask_tensor(self, img_tensor):
+        mask_tensor = self.forward(img_tensor)
+        mask_tensor = self.sigmoid(mask_tensor)
+        return (mask_tensor > 0.5).float()
+
     def get_mask(self, img):
         self.eval()
         tensor = transforms.ToTensor()(img)[None, :]
-        mask_tensor = self.forward(tensor)[0]
-        mask_tensor = self.sigmoid(mask_tensor)
-        mask_tensor = (mask_tensor > 0.5).float()
-        mask = transforms.ToPILImage()(mask_tensor)
+        mask_tensor = self.get_mask_tensor(tensor)
+        mask = transforms.ToPILImage()(mask_tensor[0])
         return mask

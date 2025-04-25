@@ -34,3 +34,27 @@ class CXRSegDataset(Dataset):
     def get_mask(self, idx):
         id = self.ids[idx]
         return Image.open(f'data/xray-segment-mask/{id}-mask.jpg')
+    
+class CXRLatDataset(Dataset):
+    def __init__(self):
+        DATA_PATH = 'lateral_data/index.txt'
+
+        self.ids = []
+        if os.path.exists(DATA_PATH):
+            with open(DATA_PATH, 'r') as index_file:
+                for line in index_file.readlines():
+                    self.ids.append(line.replace('\n', ''))
+        else:
+            print("ERROR: index.txt not found")
+    
+    def __len__(self):
+        return len(self.ids)
+
+    def __getitem__(self, idx):
+        img = self.get_image(idx)
+        tensor_img = transforms.ToTensor()(img)
+        return tensor_img
+    
+    def get_image(self, idx):
+        id = self.ids[idx]
+        return Image.open(f'lateral_data/xray-lateral/{id}.jpg')
