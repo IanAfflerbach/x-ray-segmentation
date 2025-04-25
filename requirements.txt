@@ -1,5 +1,6 @@
 python==3.13.2
 gzip
+matplotlib
 numpy
 pillow
 shutil
