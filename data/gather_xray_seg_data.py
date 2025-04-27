@@ -45,7 +45,7 @@ if not os.path.exists(index_filename):
     get_file('https://physionet.org/files/chest-x-ray-segmentation/1.0.0/CXLSeg-segmented.csv')
 
 # download datasets
-TOTAL_NUM_IMAGES = 100
+TOTAL_NUM_IMAGES = 1000
 img_ids = []
 with open(index_filename, 'r') as file:
     csv_reader = csv.DictReader(file)

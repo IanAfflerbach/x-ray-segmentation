@@ -26,7 +26,7 @@ total_losses = []
 total_acc = []
 
 # run training loop
-NUM_EPOCHS = 40
+NUM_EPOCHS = 20
 iteration = 0
 for epoch in range(NUM_EPOCHS):
     # set model to train mode

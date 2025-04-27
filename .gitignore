@@ -5,4 +5,5 @@ lateral_data/index.txt
 lateral_data/*.csv
 lateral_data/*.gz
 *.jpg
+*.png
 *.th
