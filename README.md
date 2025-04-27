@@ -8,3 +8,6 @@ NOTE: You will need a Physionet Account and with access to the datasets required
 - Similar actions can be taken in the `lateral_data` folder  but this data can not be used for training
 ## Training Model
 Run `train.py` after data is downloaded to begin training the model, takes about ~20 min with default settings
+## Testing Model
+- use `test.py` to create patchwork of results from parsing 5 random images in the dataset
+- use `test_lat.py` to create patchwork of results from parsing 5 random lateral scan images in the dataset
